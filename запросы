@@ -1,0 +1,182 @@
+1 
+SELECT abdenov_user.lastname, abdenov_user.firstname, abdenov_user.patronomic, abdenov_gender.name, abdenov_otdel.name 
+FROM abdenov_user
+JOIN abdenov_gender ON abdenov_gender.gender_id = abdenov_user.gender_id
+JOIN abdenov_teacher ON abdenov_teacher.user_id = abdenov_user.user_id
+JOIN abdenov_otdel ON abdenov_teacher.otdel_id = abdenov_otdel.otdel_id
+WHERE abdenov_otdel.name = 'Информационные системы'
+
+2 
+SELECT abdenov_user.lastname, abdenov_user.firstname, abdenov_user.patronomic, abdenov_gruppa.name, abdenov_special.name 
+FROM abdenov_user
+JOIN abdenov_student ON abdenov_student.user_id = abdenov_user.user_id
+JOIN abdenov_gruppa ON abdenov_gruppa.gruppa_id = abdenov_student.gruppa_id
+JOIN abdenov_special ON abdenov_special.special_id = abdenov_gruppa.special_id
+WHERE abdenov_special.otdel_id = 1
+
+3
+SELECT abdenov_course.name, abdenov_course.hours, abdenov_special.name 
+FROM abdenov_course
+JOIN abdenov_special ON abdenov_special.special_id = abdenov_course.special_id
+WHERE abdenov_special.otdel_id = 3
+
+4
+SELECT name, date_begin, date_end 
+FROM abdenov_gruppa
+WHERE abdenov_gruppa.special_id = 1 
+
+5
+SELECT abdenov_user.lastname, abdenov_user.firstname, abdenov_user.patronomic, abdenov_gruppa.name 
+FROM abdenov_gruppa
+JOIN abdenov_student ON abdenov_student.gruppa_id = abdenov_gruppa.gruppa_id
+JOIN abdenov_user ON abdenov_user.user_id = abdenov_student.user_id
+JOIN abdenov_special ON abdenov_special.special_id = abdenov_gruppa.special_id
+JOIN abdenov_course ON abdenov_course.special_id = abdenov_special.special_id
+WHERE abdenov_course.name = 'Мультимедиа технология'
+
+6 
+SELECT abdenov_user.lastname, abdenov_user.firstname, abdenov_user.patronomic, abdenov_course.name, abdenov_course.hours, abdenov_gruppa.name
+FROM abdenov_user 
+JOIN abdenov_teacher ON abdenov_user.user_id = abdenov_teacher.user_id
+JOIN abdenov_graduate ON abdenov_graduate.user_id = abdenov_teacher.user_id
+JOIN abdenov_gruppa ON abdenov_gruppa.gruppa_id = abdenov_graduate.gruppa_id
+JOIN abdenov_course ON abdenov_course.course_id = abdenov_graduate.course_id
+JOIN abdenov_graduate_time ON abdenov_graduate_time.graduate_id = abdenov_graduate.graduate_id
+JOIN abdenov_lesson_num ON abdenov_lesson_num.lesson_num_id = abdenov_graduate_time.lesson_num_id
+WHERE abdenov_lesson_num.time_lesson BETWEEN '08:30:00' AND '15:00:00';
+
+7
+SELECT COUNT(*), abdenov_otdel.name 
+FROM abdenov_otdel
+JOIN abdenov_special ON abdenov_special.otdel_id = abdenov_otdel.otdel_id
+JOIN abdenov_gruppa ON abdenov_gruppa.special_id = abdenov_special.special_id
+LEFT OUTER JOIN abdenov_graduate ON abdenov_graduate.gruppa_id = abdenov_gruppa.gruppa_id
+GROUP BY abdenov_otdel.name
+
+8
+SELECT COUNT(*), abdenov_otdel.name 
+FROM abdenov_otdel
+JOIN abdenov_special ON abdenov_special.otdel_id = abdenov_otdel.otdel_id
+JOIN abdenov_course ON abdenov_special.special_id = abdenov_course.special_id
+GROUP BY abdenov_otdel.otdel_id
+
+9
+SELECT abdenov_user.lastname, abdenov_user.firstname, abdenov_user.patronomic 
+FROM abdenov_teacher
+JOIN abdenov_user ON abdenov_user.user_id = abdenov_teacher.user_id
+LEFT OUTER JOIN abdenov_graduate ON abdenov_graduate.user_id = abdenov_teacher.user_id
+WHERE abdenov_graduate.user_id IS null
+
+10
+SELECT abdenov_course.name 
+FROM abdenov_course
+LEFT OUTER JOIN abdenov_graduate ON abdenov_graduate.course_id = abdenov_course.course_id
+WHERE abdenov_graduate.course_id IS null
+
+11
+SELECT abdenov_special.name 
+FROM abdenov_special 
+LEFT OUTER JOIN abdenov_course ON abdenov_course.special_id = abdenov_special.special_id
+WHERE abdenov_course.special_id IS null
+
+12
+SELECT abdenov_user.lastname, abdenov_user.firstname, abdenov_user.patronomic 
+FROM abdenov_student 
+JOIN abdenov_user ON abdenov_student.user_id=abdenov_user.user_id
+JOIN abdenov_gender ON abdenov_user.gender_id=abdenov_gender.gender_id 
+JOIN abdenov_gruppa ON abdenov_student.gruppa_id=abdenov_gruppa.gruppa_id
+JOIN abdenov_graduate ON abdenov_graduate.gruppa_id=abdenov_gruppa.gruppa_id
+JOIN abdenov_graduate_time ON abdenov_graduate.graduate_id=abdenov_graduate_time.graduate_id
+JOIN abdenov_lesson_num ON abdenov_graduate_time.lesson_num_id=abdenov_lesson_num.lesson_num_id
+WHERE abdenov_lesson_num.time_lesson BETWEEN '10:30:00' AND '18:30:00' AND abdenov_gender.gender_id=2
+
+13
+SELECT abdenov_course.name, abdenov_lesson_num.name 
+FROM abdenov_course 
+JOIN abdenov_graduate ON abdenov_course.course_id=abdenov_graduate.course_id
+JOIN abdenov_graduate_time ON abdenov_graduate.graduate_id=abdenov_graduate_time.graduate_id
+JOIN abdenov_lesson_num ON abdenov_graduate_time.lesson_num_id=abdenov_lesson_num.lesson_num_id 
+WHERE abdenov_lesson_num.time_lesson BETWEEN '12:30:00' AND '18:30:00'
+
+14
+SELECT abdenov_user.lastname, abdenov_user.firstname, abdenov_user.patronomic 
+FROM abdenov_student
+JOIN abdenov_user ON abdenov_user.user_id = abdenov_student.user_id
+JOIN abdenov_gruppa ON abdenov_student.gruppa_id = abdenov_gruppa.gruppa_id
+JOIN abdenov_graduate ON abdenov_graduate.gruppa_id = abdenov_gruppa.gruppa_id
+JOIN abdenov_graduate_time ON abdenov_graduate_time.graduate_id = abdenov_graduate.graduate_id
+JOIN abdenov_day ON abdenov_day.day_id = abdenov_graduate_time.day_id
+WHERE abdenov_day.name = 'Пятница'
+
+15
+SELECT abdenov_day.name 
+FROM abdenov_day
+LEFT OUTER JOIN abdenov_graduate_time ON abdenov_graduate_time.day_id = abdenov_day.day_id
+WHERE abdenov_graduate_time.day_id IS null
+
+16
+SELECT abdenov_special.name 
+FROM abdenov_special
+JOIN abdenov_course ON abdenov_course.special_id = abdenov_special.special_id
+JOIN abdenov_graduate ON abdenov_graduate.course_id = abdenov_course.course_id
+JOIN abdenov_graduate_time ON abdenov_graduate_time.graduate_id = abdenov_graduate.graduate_id
+JOIN abdenov_day ON abdenov_day.day_id = abdenov_graduate_time.day_id
+WHERE abdenov_day.name = 'Среда'
+
+17
+SELECT abdenov_user.lastname, abdenov_user.firstname, abdenov_user.patronomic, abdenov_otdel.name 
+FROM abdenov_teacher
+JOIN abdenov_user ON abdenov_user.user_id = abdenov_teacher.user_id
+JOIN abdenov_otdel ON abdenov_otdel.otdel_id = abdenov_teacher.otdel_id
+JOIN abdenov_graduate ON abdenov_graduate.user_id = abdenov_teacher.user_id
+JOIN abdenov_graduate_time ON abdenov_graduate_time.graduate_id = abdenov_graduate.graduate_id
+JOIN abdenov_day ON abdenov_day.day_id = abdenov_graduate_time.day_id
+WHERE abdenov_day.name = 'Пятница'
+
+18
+SELECT abdenov_user.lastname, abdenov_user.firstname, abdenov_user.patronomic, abdenov_gruppa.name, abdenov_special.name 
+FROM abdenov_student 
+JOIN abdenov_user ON abdenov_student.user_id=abdenov_user.user_id
+JOIN abdenov_gruppa ON abdenov_student.gruppa_id=abdenov_gruppa.gruppa_id
+JOIN abdenov_special ON abdenov_gruppa.special_id=abdenov_special.special_id
+JOIN abdenov_graduate ON abdenov_gruppa.gruppa_id=abdenov_graduate.gruppa_id
+JOIN abdenov_course ON abdenov_graduate.course_id=abdenov_course.course_id
+WHERE abdenov_course.hours>12
+
+19
+SELECT abdenov_course.name, abdenov_course.hours, abdenov_special.name 
+FROM abdenov_course
+JOIN abdenov_special ON abdenov_special.special_id = abdenov_course.special_id
+JOIN abdenov_otdel ON abdenov_otdel.otdel_id = abdenov_special.otdel_id
+JOIN abdenov_graduate ON abdenov_graduate.course_id = abdenov_course.course_id
+JOIN abdenov_graduate_time ON abdenov_graduate.graduate_id = abdenov_graduate_time.graduate_id
+JOIN abdenov_day ON abdenov_day.day_id = abdenov_graduate_time.day_id
+WHERE abdenov_otdel.name = 'Технические специальности' AND abdenov_day.name = 'Среда' OR abdenov_day.name = 'Пятница'
+
+20
+SELECT abdenov_otdel.name 
+FROM abdenov_otdel 
+JOIN abdenov_teacher ON abdenov_otdel.otdel_id=abdenov_teacher.otdel_id
+JOIN abdenov_graduate ON abdenov_teacher.user_id=abdenov_graduate.user_id
+JOIN abdenov_graduate_time ON abdenov_graduate.graduate_id=abdenov_graduate_time.graduate_id
+JOIN abdenov_lesson_num ON abdenov_graduate_time.lesson_num_id=abdenov_lesson_num.lesson_num_id
+JOIN abdenov_day ON abdenov_graduate_time.day_id=abdenov_day.day_id
+WHERE abdenov_lesson_num.time_lesson BETWEEN '09:00:00' AND '12:00:00' AND abdenov_day.day_id=2
+
+21
+SELECT abdenov_day.name, COUNT(*) 
+FROM abdenov_day
+JOIN abdenov_graduate_time ON abdenov_graduate_time.day_id = abdenov_day.day_id
+JOIN abdenov_graduate ON abdenov_graduate.graduate_id = abdenov_graduate_time.graduate_id
+JOIN abdenov_course ON abdenov_graduate.course_id = abdenov_course.course_id
+GROUP BY abdenov_course.course_id, abdenov_day.name
+
+22
+SELECT abdenov_special.name, abdenov_lesson_num.name, abdenov_day.name 
+FROM abdenov_special 
+JOIN abdenov_course ON abdenov_special.special_id=abdenov_course.special_id
+JOIN abdenov_graduate ON abdenov_course.course_id=abdenov_graduate.course_id
+JOIN abdenov_graduate_time ON abdenov_graduate.graduate_id=abdenov_graduate_time.graduate_id
+JOIN abdenov_lesson_num ON abdenov_graduate_time.lesson_num_id=abdenov_lesson_num.lesson_num_id 
+JOIN abdenov_day ON abdenov_graduate_time.day_id=abdenov_day.day_id
+WHERE abdenov_lesson_num.time_lesson BETWEEN '15:00:00' AND '18:00:00' AND abdenov_day.day_id BETWEEN 4 AND 6
