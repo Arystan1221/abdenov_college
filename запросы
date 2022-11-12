@@ -81,8 +81,8 @@ WHERE abdenov_course.special_id IS null
 
 12
 SELECT abdenov_user.lastname, abdenov_user.firstname, abdenov_user.patronomic 
-FROM abdenov_student 
-JOIN abdenov_user ON abdenov_student.user_id=abdenov_user.user_id
+FROM abdenov_user 
+JOIN abdenov_student ON abdenov_user.user_id=abdenov_student.user_id
 JOIN abdenov_gender ON abdenov_user.gender_id=abdenov_gender.gender_id 
 JOIN abdenov_gruppa ON abdenov_student.gruppa_id=abdenov_gruppa.gruppa_id
 JOIN abdenov_graduate ON abdenov_graduate.gruppa_id=abdenov_gruppa.gruppa_id
